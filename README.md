@@ -1,1 +1,1 @@
-# spark-python-s02g02
+#### Big Data project using Spark with python to develop Google Page Rank System.
