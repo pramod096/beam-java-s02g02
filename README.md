@@ -11,7 +11,18 @@ PR(A) = (1-d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))
 ```
 
 ## Team Members
+<table>
+<td align="center"><a href="https://github.com/pramod096"><img src="images/pramod.JPG" width="180px;" height="180px;" alt="Pramod Gonegari"/><br /><sub><b>Pramod Gonegari</b></sub></a><br /></td>
 
+<td align="center"><a href="https://github.com/saikiranreddygangidi"><img src="images/sai.jpg" width="180px;" height="180px;" alt="SaiKiran Reddy Gangidi"/><br /><sub><b>SaiKiran Reddy Gangidi</b></sub></a><br /></td>
+
+<td align="center"><a href="https://github.com/Narendra-kumar-Gunturu"><img src="images/narendra.jpg" width="180px;" height="180px;" alt="Narendra Gunturu"/><br /><sub><b>Narendra Gunturu</b></sub></a><br /></td>
+
+<td align="center"><a href="https://github.com/vivekd31"><img src="images/vivek.jpg" width="180px;" height="180px;" alt="Vivek Drakshapally"/><br /><sub><b>Vivek Drakshapally</b></sub></a><br /></td>
+
+<td align="center"><a href="https://github.com/Vemula23"><img src="images/venky.jpg" width="180px;" height="180px;" alt="Venkatesh Vemula"/><br /><sub><b>Venkatesh Vemula</b></sub></a><br /></td>
+
+</table>
 
 
 ## Implementaion
