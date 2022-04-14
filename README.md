@@ -1,4 +1,4 @@
-#### Big Data project using Spark with python to develop Google Page Rank System.
+#### Big Data project using Apache Beam with Java SDK to develop Google Page Rank System.
 
 
 
