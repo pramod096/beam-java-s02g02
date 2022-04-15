@@ -4,3 +4,8 @@
 other related books.
 
 ![Books Graph](../images/pramodBooksGraph.jpeg)
+
+### Execution Command
+```
+mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.pramod.PageRankJobOnePramod
+```
