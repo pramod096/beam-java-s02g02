@@ -14,7 +14,7 @@ PR(A) = (1-d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))
 <table>
 <td align="center"><a href="https://github.com/pramod096"><img src="images/pramod.JPG" width="180px;" height="180px;" alt="Pramod Gonegari"/><br /><sub><b>Pramod Gonegari</b></sub></a><br /></td>
 
-<td align="center"><a href="https://github.com/saikiranreddygangidi"><img src="images/sai.jpg" width="180px;" height="180px;" alt="SaiKiran Reddy Gangidi"/><br /><sub><b>SaiKiran Reddy Gangidi</b></sub></a><br /></td>
+<td align="center"><a href="https://github.com/saikiranreddygangidi"><img src="images/sai.jpg" width="180px;" height="180px;" alt="SaiKiran Gangidi"/><br /><sub><b>SaiKiran Gangidi</b></sub></a><br /></td>
   
 <td align="center"><a href="https://github.com/vallapurapuramu"><img src="images/ramu.jpeg" width="180px;" height="180px;" alt="Ramu Vallapurapu"/><br /><sub><b>Ramu Vallapurapu</b></sub></a><br /></td>
 
