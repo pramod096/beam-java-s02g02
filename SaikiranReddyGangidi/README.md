@@ -1,21 +1,21 @@
-#README File
+# README 
 
-This is saikiran reddy Gangidi I like developed the project using the cricket web the root folder is **cricketweb**
+This is saikiran reddy Gangidi I am developed the project using the cricket web the root folder named **cricketweb** 
 
-Where cricket readme have details about the cricket 
+Where cricket markdown files have all the details about the cricket 
 
-[cricket](cricket.md)
+[CRICKET](cricket.md)
 
 **Cricket has played in different formart listed below**
 
-[ODIcricket](ODIcricket.md)
-[T20cricket](T20cricket.md)
-[TESTcricket](TESTcricket.md)
+[ODIcricket](ODIcricket.md)<br>
+[T20cricket](T20cricket.md)<br>
+[TESTcricket](TESTcricket.md)<br>
 
 **Cricket has one of major tourament where all the country teams play to win a cup named**
 
-[worldcup](worldcup.md)
+[WORLDCUP](worldcup.md)
 
-**for entertainment purposes local country tourament were also played in that top one is**
+**for entertainment purposes local country tourament were also played in that on of the top one is**
 
 [IPLcricket](IPLcricket.md)
