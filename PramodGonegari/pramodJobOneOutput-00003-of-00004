@@ -1,0 +1,3 @@
+KV{social.md, [politics.md, economics.md, history.md]}
+KV{politics.md, [social.md]}
+KV{history.md, [social.md]}
