@@ -1,0 +1,3 @@
+KV{chemistry.md, [science.md]}
+KV{physics.md, [science.md]}
+KV{science.md, [physics.md, chemistry.md]}
