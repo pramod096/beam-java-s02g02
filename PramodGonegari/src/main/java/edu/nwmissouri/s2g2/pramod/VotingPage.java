@@ -1,5 +1,10 @@
 package edu.nwmissouri.s2g2.pramod;
 
-public class VotingPage {
+import java.io.Serializable;
 
+public class VotingPage implements Serializable {
+       
+    public VotingPage(String s, Integer i) {
+
+    }
 }
