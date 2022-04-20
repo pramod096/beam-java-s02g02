@@ -19,7 +19,8 @@ import org.apache.beam.sdk.values.TypeDescriptors;
 
 public class JobOnePageRankDrakshapally {
 
-static class Job1Finalizer extends DoFn<KV<String, Iterable<String>>, KV<String, RankedPage>> {
+
+  static class Job1Finalizer extends DoFn<KV<String, Iterable<String>>, KV<String, RankedPage>> {
     @ProcessElement
     public void processElement(@Element KV<String, Iterable<String>> element,
         OutputReceiver<KV<String, RankedPage>> receiver) {
@@ -36,6 +37,7 @@ static class Job1Finalizer extends DoFn<KV<String, Iterable<String>>, KV<String,
       receiver.output(KV.of(element.getKey(), new RankedPage(element.getKey(), voters)));
     }
   }
+  
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
