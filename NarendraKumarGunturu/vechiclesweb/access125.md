@@ -1,1 +1,7 @@
 [maruthi](maruthi.md)
+
+The Maruthi Access 125 is a scooter produced by the Japanese motorcycle company Suzuki through its Indian subsidiary. It was introduced on September 18, 2007.[1] A similar model called the Swish 125 was produced from 2012 to 2016.
+
+On October 3, 2013, in collaboration with Bollywood superstar Salman Khan's Being Human foundation, Suzuki launched the special 'Being Human' edition of the Suzuki Access 125. The special edition is available only in Pear Mirage White colour and features ‘Apna Way of life’ logo. Other features in the Special Edition include beige leather seat cover, chrome grab rail and rear view mirrors. The special edition Access 125 is more expensive than the standard edition of Access 125. It is currently in its third generation and currently sold in India, whereas Swish 125 manufacturing discontinued in year 2016. The Special Edition was available for a limited period.
+
+A special edition based on the Access 125 now available in 2018 and is currently sold as regular product along with its normal siblings. Special edition is available in white, silver, matte black and matte red colour. Special edition is having round chrome mirrors, leather seats, black alloy wheels and disc brake in front with combined breaking system and mobile charging socket.
