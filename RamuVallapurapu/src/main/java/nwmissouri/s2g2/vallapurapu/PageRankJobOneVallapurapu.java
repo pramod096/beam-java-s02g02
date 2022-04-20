@@ -15,6 +15,29 @@ import org.apache.beam.sdk.values.TypeDescriptors;
 
 public class PageRankJobOneVallapurapu {
 
+	 static class Job1Finalizer extends DoFn<KV<String, Iterable<String>>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, Iterable<String>> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      Integer contributorVotes = 0;
+      if (element.getValue() instanceof Collection) {
+        contributorVotes = ((Collection<String>) element.getValue()).size();
+      }
+      ArrayList<VotingPage> voters = new ArrayList<VotingPage>();
+      for (String voterName : element.getValue()) {
+        if (!voterName.isEmpty()) {
+          voters.add(new VotingPage(voterName, contributorVotes));
+        }
+      }
+      receiver.output(KV.of(element.getKey(), new RankedPage(element.getKey(), voters)));
+    }
+  }
+
+  static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPage>> {}
+
+  
+  static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<String, RankedPage>> {}
+
 	public static void main(String[] args) {
 
 		PipelineOptions options = PipelineOptionsFactory.create();
