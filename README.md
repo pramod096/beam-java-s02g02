@@ -86,8 +86,17 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Venkatesh Vemula
+[Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
+[Wiki link](https://github.com/pramod096/beam-java-s02g02/wiki/Venkatesh-Vemula)
+[Individual Code Folder Link](https://github.com/pramod096/beam-java-s02g02/tree/main/VenkateshVemula)
 
+- The **Films Web** is the project i have implemented using the different film industry data which contains data about the multiple insurtries.
+-  Here I'm using Apache Beam with Java SDK
+ #### Here is the Execution Command 
 
+```
+mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.vemula.JobOneVemula 
+```
 
 ### Vivek Drakshapally
 [Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
