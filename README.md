@@ -83,6 +83,13 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Vivek Drakshapally
+[Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
+[Wiki link](https://github.com/pramod096/beam-java-s02g02/wiki/Vivek-Drakshapally)
+[Individual Code Repo Link](https://github.com/pramod096/beam-java-s02g02/tree/main/VivekDrakshapally)
+
+- In this project i started implementing Google PageRank on the Sports Web Pages.
+- Google PageRank using Apache Beam with Java SDK
+- We can run the application using ``` mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.drakshapally.JobOnePageRankDrakshapally ```
 
 
 
