@@ -24,3 +24,10 @@ Where cricket markdown files have all the details about the cricket
 ### Here is the InterConnection web among them 
 
 ![gangidigraph](../images/gangidigraph.jpeg)
+
+
+### Here is the command for Executing or Execution Commnad 
+
+```
+mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRankGangidi
+```
