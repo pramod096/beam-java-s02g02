@@ -57,11 +57,13 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.pramod.PageRankJobOn
 
 
 ### Saikiran Reddy Gangidi
-The **Cricket Web** I implemented Cricket web For which contains interconnection  between different webpages like cricket,worldcup and  etc Where I Build the Google PageRank for calculating the PageRank of different webpages in the web .
+The **Cricket Web** I implemented Cricket web For which contains interconnection  between different webpages like cricket,worldcup and  etc Where I Build the Google PageRank for calculating the PageRank of different webpages in the web And I implemeting the Google PageRank Using Apache Beam with Java SDK In my own **[Workspace](https://github.com/pramod096/beam-java-s02g02/tree/main/SaikiranReddyGangidi)**
+
+The Weekly Work will be Updated or communicated by using the **[Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Saikiran-Reddy-Gangidi)**
 
 #### Here is the Interconnection Diagram 
 
-![Cricket web](images/gangidigraph.jpeg)
+<img src="images/gangidigraph.jpeg" alt="CricketWeb" style="width:300px;height:200px;text-align:center;display:block"/>
 
 #### Here is the Execution Command 
 
