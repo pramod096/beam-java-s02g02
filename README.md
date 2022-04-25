@@ -28,7 +28,7 @@ PR(A) = (1-d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))
 
 
 ## Implementaion
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each Team Member will implement Google PageRank using ***Apache Beam*** with ***Java SDK***, in their unique folders and will communicate with all Team Members about the individual approach and suggestions.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each Team Member will implement Google PageRank using ***Apache Beam*** with their preferred language ***SDK***, in their unique folders and will communicate with all Team Members about the individual approach and suggestions. The development is planned using our [***Project Board***](https://github.com/pramod096/beam-java-s02g02/projects/1), [***Issues***](https://github.com/pramod096/beam-java-s02g02/issues), [***Milestones***](https://github.com/pramod096/beam-java-s02g02/milestones) and our weekly progress is communicated through [***Wiki***](https://github.com/pramod096/beam-java-s02g02/wiki).
 
 
 
@@ -36,12 +36,17 @@ PR(A) = (1-d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))
 
 ## Member Comments
 
+
 ### Pramod Gonegari
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mini internet I have implemented to build Google PageRank, contains web pages of different books and contain links to 
 other related books.
 
-![Books Graph](images/pramodBooksGraph.jpeg)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I have implemented Google PageRank using ***Apache Beam*** with ***Java SDK***, in my own [***WorkSpace***](https://github.com/pramod096/beam-java-s02g02/tree/main/PramodGonegari) and my weekly progress is communicated through [***my wiki page***](https://github.com/pramod096/beam-java-s02g02/wiki/Pramod-Gonegari).
+
+
+<img src="images/pramodBooksGraph.jpeg" alt="Books Graph" style="width:300px;height:200px;text-align:center;display:block"/>
+
 
 ##### Execution Command
 ```
