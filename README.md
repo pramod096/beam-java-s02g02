@@ -38,6 +38,16 @@ PR(A) = (1-d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))
 
 ### Pramod Gonegari
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The mini internet I have implemented to build Google PageRank, contains web pages of different books and contain links to 
+other related books.
+
+![Books Graph](images/pramodBooksGraph.jpeg)
+
+##### Execution Command
+```
+mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.pramod.PageRankJobOnePramod
+```
+
 
 
 
