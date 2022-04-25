@@ -101,3 +101,10 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Narendra Gunturu
+[Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
+[Wiki link](https://github.com/pramod096/beam-java-s02g02/wiki/Narendra-Kumar-Gunturu)
+[Individual Code Link](https://github.com/pramod096/beam-java-s02g02/tree/main/NarendraKumarGunturu)
+
+- In This project I worked on Google page rank using Apache Beam with  Different types of Vehicle's data.
+- Here I'm using Apache Beam with Java SDK
+- For Executing this Application ``` mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gunturu.PageRankJobOneGunturu ```
