@@ -46,6 +46,15 @@ PR(A) = (1-d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))
 
 
 ### Ramu Vallapurapu
+[Link to Repository](https://github.com/pramod096/beam-java-s02g02.git)
+[link to Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Ramu-Vallapurapu)
+[link to Individual Code Repo](https://github.com/pramod096/beam-java-s02g02/tree/main/RamuVallapurapu)
+
+- In this project I am implementing Google PageRank on the social media pages.
+- Google PageRank using Apache Beam with Java SDK
+- We can run the application using ``` mvn compile exec:java -D exec.mainClass=nwmissouri.s2g2.vallapurapu.JobOnePageRankVallapurapu ```
+
+
 
 
 
