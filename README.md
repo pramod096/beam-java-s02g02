@@ -52,7 +52,17 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.pramod.PageRankJobOn
 
 
 ### Saikiran Reddy Gangidi
+The **Cricket Web** I implemented Cricket web For which contains interconnection  between different webpages like cricket,worldcup and  etc Where I Build the Google PageRank for calculating the PageRank of different webpages in the web .
 
+#### Here is the Interconnection Diagram 
+
+![Cricket web](images/gangidigraph.jpeg)
+
+#### Here is the Execution Command 
+
+```
+mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRankGangidi
+```
 
 
 ### Ramu Vallapurapu
