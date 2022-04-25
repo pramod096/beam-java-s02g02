@@ -79,7 +79,7 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 #### Here is the Interconnection Diagram for social media pages.
 
-<img src="images/vallapurapugraph.png" alt="socialmediaweb" style="width:300px;height:200px;text-align:center;display:block"/>
+<img src="images/bigdata.PNG" alt="socialmediaweb" style="width:300px;height:200px;text-align:center;display:block"/>
 
 - In this project I am implementing Google PageRank on the social media pages.
 - It will show the most ranked social media page based on the usage on the internet
