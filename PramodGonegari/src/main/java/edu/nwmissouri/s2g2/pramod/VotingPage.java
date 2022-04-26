@@ -2,8 +2,6 @@ package edu.nwmissouri.s2g2.pramod;
 
 import java.io.Serializable;
 
-import org.apache.beam.sdk.options.Default.Integer;
-
 class VotingPage implements Serializable {
     private String name;
     private Double rank;
