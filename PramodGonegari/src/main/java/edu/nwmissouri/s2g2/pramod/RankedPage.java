@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 class RankedPage implements Serializable {
-    private String rankedPageName;
-    private Double rankValue;
+    private String rankedPageName = "";
+    private Double rankValue = 1.0;
     private ArrayList<VotingPage> pagesVoted;
 
     // Constructors
@@ -49,6 +49,6 @@ class RankedPage implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s %.6f %s", rankedPageName, rankValue, pagesVoted);
+        return String.format("%s %.4f %s", rankedPageName, rankValue, pagesVoted);
     }
 }

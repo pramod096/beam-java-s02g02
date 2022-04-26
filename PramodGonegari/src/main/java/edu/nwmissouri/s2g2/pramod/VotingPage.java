@@ -3,9 +3,9 @@ package edu.nwmissouri.s2g2.pramod;
 import java.io.Serializable;
 
 class VotingPage implements Serializable {
-    private String name;
-    private Double rank;
-    private Integer votes;
+    private String name = "";
+    private Double rank = 1.0;
+    private Integer votes = 0;
 
     public VotingPage(String name, Integer votes) {
         this.name = name;
@@ -46,6 +46,6 @@ class VotingPage implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s %.6f %s", name, rank, votes);
+        return String.format("%s %.4f %s", name, rank, votes);
     }
 }
