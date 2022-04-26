@@ -1,6 +1,7 @@
 package edu.nwmissouri.s2g2.pramod;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
@@ -11,11 +12,13 @@ import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.Flatten;
 import org.apache.beam.sdk.transforms.GroupByKey;
 import org.apache.beam.sdk.transforms.MapElements;
+import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.transforms.DoFn.Element;
+import org.apache.beam.sdk.transforms.DoFn.ProcessElement;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionList;
 import org.apache.beam.sdk.values.TypeDescriptors;
-import org.yaml.snakeyaml.nodes.CollectionNode;
 
 public class PageRankJobOnePramod {
 
@@ -54,6 +57,69 @@ public class PageRankJobOnePramod {
     }
   }
 
+  static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, RankedPage> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      Integer votes = 0;
+      ArrayList<VotingPage> voters = element.getValue().getPagesVoted();
+      if (voters instanceof Collection) {
+        votes = ((Collection<VotingPage>) voters).size();
+      }
+
+      for (VotingPage vp : voters) {
+        String pageName = vp.getName();
+        Double pageRank = vp.getRank();
+        String contributingPageName = element.getKey();
+        Double contributingPageRank = element.getValue().getRankValue();
+        VotingPage contributor = new VotingPage(contributingPageName, contributingPageRank, votes);
+        ArrayList<VotingPage> arr = new ArrayList<>();
+        arr.add(contributor);
+        receiver.output(KV.of(vp.getName(), new RankedPage(pageName, pageRank, arr)));
+      }
+    }
+  }
+
+  static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, Iterable<RankedPage>> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      String thisPage = element.getKey();
+      Iterable<RankedPage> rankedPages = element.getValue();
+      Double dampingFactor = 0.85;
+      Double updatedRank = (1 - dampingFactor);
+      ArrayList<VotingPage> newVoters = new ArrayList<VotingPage>();
+
+      for (RankedPage pg : rankedPages) {
+        if (pg != null) {
+          for (VotingPage vp : pg.getPagesVoted()) {
+            newVoters.add(vp);
+            updatedRank += (dampingFactor) * vp.getRank() / (double) vp.getVotes();
+          }
+        }
+      }
+
+      receiver.output(KV.of(thisPage, new RankedPage(thisPage, updatedRank, newVoters)));
+    }
+  }
+
+  private static PCollection<KV<String, String>> pramodMapOne(Pipeline p, String myMiniWeb, String dataFile) {
+    String dataLocation = myMiniWeb + "/" + dataFile;
+    PCollection<String> pcolInputLines = p.apply(TextIO.read().from(dataLocation));
+
+    PCollection<String> pcolLinkLines = pcolInputLines.apply(Filter.by((String line) -> line.startsWith("[")));
+    PCollection<String> pcolLinkPages = pcolLinkLines.apply(MapElements.into(TypeDescriptors.strings())
+        .via(
+            (String linkline) -> linkline.substring(linkline.indexOf("(") + 1, linkline.length() - 1)));
+    PCollection<KV<String, String>> pcolKVpairs = pcolLinkPages.apply(MapElements
+        .into(
+            TypeDescriptors.kvs(
+                TypeDescriptors.strings(), TypeDescriptors.strings()))
+        .via(outlink -> KV.of(dataFile, outlink)));
+    return pcolKVpairs;
+
+  }
+
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
@@ -84,32 +150,35 @@ public class PageRankJobOnePramod {
         .and(pcol5).and(pcol6).and(pcol7);
 
     PCollection<KV<String, String>> mergedList = pColBooksList.apply(Flatten.<KV<String, String>>pCollections());
-    PCollection<KV<String, Iterable<String>>> urlToDocs = mergedList.apply(GroupByKey.<String, String>create());
+    PCollection<KV<String, Iterable<String>>> kvStringReducedPairs = mergedList
+        .apply(GroupByKey.<String, String>create());
 
-    PCollection<String> pLinksStr = urlToDocs.apply(
-        MapElements.into(
-            TypeDescriptors.strings())
-            .via((mergeOut) -> mergeOut.toString()));
+    PCollection<KV<String, RankedPage>> job2in = kvStringReducedPairs.apply(ParDo.of(new Job1Finalizer()));
 
-    pLinksStr.apply(TextIO.write().to("pramodJobOneOutput"));
+    PCollection<KV<String, RankedPage>> job2out = null;
+
+    PCollection<KV<String, RankedPage>> mappedKVs = null;
+
+    PCollection<KV<String, Iterable<RankedPage>>> reducedKVs = null;
+    int iterations = 50;
+    for (int i = 1; i <= iterations; i++) {
+      mappedKVs = job2in.apply(ParDo.of(new Job2Mapper()));
+
+      reducedKVs = mappedKVs
+          .apply(GroupByKey.<String, RankedPage>create());
+
+      job2out = reducedKVs.apply(ParDo.of(new Job2Updater()));
+
+      job2in = job2out;
+
+    }
+
+    PCollection<String> output = job2out.apply(MapElements.into(
+        TypeDescriptors.strings())
+        .via(kv -> kv.toString()));
+
+    output.apply(TextIO.write().to("pramodJobOneOutput"));
 
     p.run().waitUntilFinish();
-  }
-
-  private static PCollection<KV<String, String>> pramodMapOne(Pipeline p, String myMiniWeb, String dataFile) {
-    String dataLocation = myMiniWeb + "/" + dataFile;
-    PCollection<String> pcolInputLines = p.apply(TextIO.read().from(dataLocation));
-
-    PCollection<String> pcolLinkLines = pcolInputLines.apply(Filter.by((String line) -> line.startsWith("[")));
-    PCollection<String> pcolLinkPages = pcolLinkLines.apply(MapElements.into(TypeDescriptors.strings())
-        .via(
-            (String linkline) -> linkline.substring(linkline.indexOf("(") + 1, linkline.length() - 1)));
-    PCollection<KV<String, String>> pcolKVpairs = pcolLinkPages.apply(MapElements
-        .into(
-            TypeDescriptors.kvs(
-                TypeDescriptors.strings(), TypeDescriptors.strings()))
-        .via(outlink -> KV.of(dataFile, outlink)));
-    return pcolKVpairs;
-
   }
 }
