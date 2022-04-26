@@ -8,11 +8,9 @@ class RankedPage implements Serializable {
     private Double rankValue;
     private ArrayList<VotingPage> pagesVoted;
 
-
-// Constructors
-       public RankedPage(String rankedPageName, ArrayList<VotingPage> pagesVoted)
-        {
-        this.rankedPageName = name;
+    // Constructors
+    public RankedPage(String rankedPageName, ArrayList<VotingPage> pagesVoted) {
+        this.rankedPageName = rankedPageName;
         this.pagesVoted = pagesVoted;
 
     }
@@ -24,7 +22,7 @@ class RankedPage implements Serializable {
 
     }
 
-// Getters and Setters
+    // Getters and Setters
     public String getRankedPageName() {
         return rankedPageName;
     }
@@ -49,7 +47,7 @@ class RankedPage implements Serializable {
         this.pagesVoted = pagesVoted;
     }
 
-        @Override
+    @Override
     public String toString() {
         return String.format("%s %.6f %s", rankedPageName, rankValue, pagesVoted);
     }
