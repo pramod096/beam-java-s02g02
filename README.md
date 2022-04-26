@@ -57,11 +57,13 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.pramod.PageRankJobOn
 
 
 ### Saikiran Reddy Gangidi
-The **Cricket Web** I implemented Cricket web For which contains interconnection  between different webpages like cricket,worldcup and  etc Where I Build the Google PageRank for calculating the PageRank of different webpages in the web .
+The **Cricket Web** I implemented Cricket web For which contains interconnection  between different webpages like cricket,worldcup and  etc Where I Build the Google PageRank for calculating the PageRank of different webpages in the web And I implemeting the Google PageRank Using Apache Beam with Java SDK In my own **[Workspace](https://github.com/pramod096/beam-java-s02g02/tree/main/SaikiranReddyGangidi)**
+
+The Weekly Work will be Updated or communicated by using the **[Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Saikiran-Reddy-Gangidi)**
 
 #### Here is the Interconnection Diagram 
 
-![Cricket web](images/gangidigraph.jpeg)
+<img src="images/gangidigraph.jpeg" alt="CricketWeb" style="width:300px;height:200px;text-align:center;display:block"/>
 
 #### Here is the Execution Command 
 
@@ -75,7 +77,12 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 [link to Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Ramu-Vallapurapu)
 [link to Individual Code Repo](https://github.com/pramod096/beam-java-s02g02/tree/main/RamuVallapurapu)
 
+#### Here is the Interconnection Diagram for social media pages.
+
+<img src="images/bigdata.PNG" alt="socialmediaweb" style="width:300px;height:200px;text-align:center;display:block"/>
+
 - In this project I am implementing Google PageRank on the social media pages.
+- It will show the most ranked social media page based on the usage on the internet
 - Google PageRank using Apache Beam with Java SDK
 - We can run the application using ``` mvn compile exec:java -D exec.mainClass=nwmissouri.s2g2.vallapurapu.JobOnePageRankVallapurapu ```
 
@@ -84,13 +91,22 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Venkatesh Vemula
+[Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
+[Wiki link](https://github.com/pramod096/beam-java-s02g02/wiki/Venkatesh-Vemula)
+[Individual Code Folder Link](https://github.com/pramod096/beam-java-s02g02/tree/main/VenkateshVemula)
 
+- The **Films Web** is the project i have implemented using the different film industry data which contains data about the multiple insurtries.
+-  Here I'm using Apache Beam with Java SDK
+ #### Here is the Execution Command 
 
+```
+mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.vemula.JobOneVemula 
+```
 
 ### Vivek Drakshapally
 [Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
 [Wiki link](https://github.com/pramod096/beam-java-s02g02/wiki/Vivek-Drakshapally)
-[Individual Code Repo Link](https://github.com/pramod096/beam-java-s02g02/tree/main/VivekDrakshapally)
+[Individual Code Folder Link](https://github.com/pramod096/beam-java-s02g02/tree/main/VivekDrakshapally)
 
 - In this project i started implementing Google PageRank on the Sports Web Pages.
 - Google PageRank using Apache Beam with Java SDK
@@ -99,3 +115,10 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Narendra Gunturu
+[Repository Link](https://github.com/pramod096/beam-java-s02g02.git)
+[Wiki link](https://github.com/pramod096/beam-java-s02g02/wiki/Narendra-Kumar-Gunturu)
+[Individual Code Link](https://github.com/pramod096/beam-java-s02g02/tree/main/NarendraKumarGunturu)
+
+- In This project I worked on Google page rank using Apache Beam with  Different types of Vehicle's data.
+- Here I'm using Apache Beam with Java SDK
+- For Executing this Application ``` mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gunturu.PageRankJobOneGunturu ```
