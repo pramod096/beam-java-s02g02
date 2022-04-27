@@ -115,7 +115,28 @@ public class JobOnePageRankGangidi {
     }
   }
 
- 
+  static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, Iterable<RankedPage>> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      Double dampingFactor = 0.85;
+      Double updatedRank = (1 - dampingFactor);
+      ArrayList<VotingPage> newVoters = new ArrayList<VotingPage>();
+      for (RankedPage pg : element.getValue()) {
+        if (pg != null) {
+          for (VotingPage vp : pg.getVoters()) {
+            newVoters.add(vp);
+
+            updatedRank += (dampingFactor) * vp.getRank() / (double) vp.getContributorVotes();
+
+          }
+
+        }
+      }
+      receiver.output(KV.of(element.getKey(), new RankedPage(element.getKey(), updatedRank, newVoters)));
+
+    }
+  }
 
   public static void main(String[] args) {
 
