@@ -84,7 +84,7 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 - In this project I am implementing Google PageRank on the social media pages.
 - It will show the most ranked social media page based on the usage on the internet
 - Google PageRank using Apache Beam with Java SDK
-- We can run the application using ``` mvn compile exec:java -D exec.mainClass=nwmissouri.s2g2.vallapurapu.JobOnePageRankVallapurapu ```
+- We can run the application using ```  mvn compile exec:java -D exec.mainClass=nwmissouri.s2g2.vallapurapu.PageRankJobOneVallapurapu ```
 
 
 
