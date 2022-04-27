@@ -2,19 +2,23 @@ package edu.nwmissouri.s2g2.pramod;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.lang.Double;
+import java.lang.Integer;
+import java.io.Serializable;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
+import org.apache.beam.sdk.transforms.Combine;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.Flatten;
 import org.apache.beam.sdk.transforms.GroupByKey;
 import org.apache.beam.sdk.transforms.MapElements;
+import org.apache.beam.sdk.transforms.Max;
 import org.apache.beam.sdk.transforms.ParDo;
-import org.apache.beam.sdk.transforms.DoFn.Element;
-import org.apache.beam.sdk.transforms.DoFn.ProcessElement;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionList;
@@ -103,6 +107,24 @@ public class PageRankJobOnePramod {
     }
   }
 
+  static class Job3Finder extends DoFn<KV<String, RankedPage>, KV<String, Double>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, RankedPage> element,
+        OutputReceiver<KV<String, Double>> receiver) {
+      String currentPage = element.getKey();
+      Double currentPageRank = element.getValue().getRankValue();
+
+      receiver.output(KV.of(currentPage, currentPageRank));
+    }
+  }
+
+  public static class Job3Final implements Comparator<KV<String, Double>>, Serializable {
+    @Override
+    public int compare(KV<String, Double> o1, KV<String, Double> o2) {
+      return o1.getValue().compareTo(o2.getValue());
+    }
+  }
+
   private static PCollection<KV<String, String>> pramodMapOne(Pipeline p, String myMiniWeb, String dataFile) {
     String dataLocation = myMiniWeb + "/" + dataFile;
     PCollection<String> pcolInputLines = p.apply(TextIO.read().from(dataLocation));
@@ -173,11 +195,20 @@ public class PageRankJobOnePramod {
 
     }
 
-    PCollection<String> output = job2out.apply(MapElements.into(
+    // PCollection<String> job2FinalOutput = job2out.apply(MapElements.into(
+    // TypeDescriptors.strings())
+    // .via(kv -> kv.toString()));
+
+    // job2FinalOutput.apply(TextIO.write().to("pramodJobTwoOutput"));
+
+    PCollection<KV<String, Double>> maxRank = job2out.apply(ParDo.of(new Job3Finder()));
+
+    PCollection<KV<String, Double>> finalMax = maxRank.apply(Combine.globally(Max.of(new Job3Final())));
+
+    PCollection<String> fnl = finalMax.apply(MapElements.into(
         TypeDescriptors.strings())
         .via(kv -> kv.toString()));
-
-    output.apply(TextIO.write().to("pramodJobOneOutput"));
+    fnl.apply(TextIO.write().to("finalOutputPramod"));
 
     p.run().waitUntilFinish();
   }
