@@ -24,6 +24,9 @@ import org.apache.beam.sdk.values.TypeDescriptors;
 
 public class JobOnePageRankGangidi {
 
+  static String maxRankString = "";
+  static Double maxRankValue = Double.MIN_VALUE;
+
   // DEFINE DOFNS
   // ==================================================================
   // You can make your pipeline assembly code less verbose by defining
@@ -32,6 +35,38 @@ public class JobOnePageRankGangidi {
   // as input of type InputT
   // and transforms it to OutputT.
   // We pass this DoFn to a ParDo in our pipeline.
+
+  /**
+   * DoFn Job1Finalizer takes KV(String, String List of outlinks) and transforms
+   * the value into our custom RankedPage Value holding the page's rank and list
+   * of voters.
+   * 
+   * The output of the Job1 Finalizer creates the initial input into our
+   * iterative Job 2.
+   */
+  private static PCollection<KV<String, RankedPage>> runJob2Iteration(
+      PCollection<KV<String, RankedPage>> kvReducedPairs) {
+
+    PCollection<KV<String, RankedPage>> mappedKVs = kvReducedPairs.apply(ParDo.of(new Job2Mapper()));
+
+    // KV{README.md, README.md, 1.00000, 0, [java.md, 1.00000,1]}
+    // KV{README.md, README.md, 1.00000, 0, [go.md, 1.00000,1]}
+    // KV{java.md, java.md, 1.00000, 0, [README.md, 1.00000,3]}
+
+    PCollection<KV<String, Iterable<RankedPage>>> reducedKVs = mappedKVs
+        .apply(GroupByKey.<String, RankedPage>create());
+
+    // KV{java.md, [java.md, 1.00000, 0, [README.md, 1.00000,3]]}
+    // KV{README.md, [README.md, 1.00000, 0, [python.md, 1.00000,1], README.md,
+    // 1.00000, 0, [java.md, 1.00000,1], README.md, 1.00000, 0, [go.md, 1.00000,1]]}
+
+    PCollection<KV<String, RankedPage>> updatedOutput = reducedKVs.apply(ParDo.of(new Job2Updater()));
+
+    // KV{README.md, README.md, 2.70000, 0, [java.md, 1.00000,1, go.md, 1.00000,1,
+    // python.md, 1.00000,1]}
+    // KV{python.md, python.md, 0.43333, 0, [README.md, 1.00000,3]}
+    return updatedOutput;
+  }
 
   
 
@@ -53,7 +88,34 @@ public class JobOnePageRankGangidi {
     }
   }
 
-  
+  static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, RankedPage> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      Integer votes = 0;
+      ArrayList<VotingPage> voters = element.getValue().getVoters();
+      if (voters instanceof Collection) {
+        votes = ((Collection<VotingPage>) voters).size();
+      }
+      String contributingPageName = element.getKey();
+
+      Double contributingPageRank = element.getValue().getRank();
+      String pName;
+      Double pRank;
+      for (VotingPage votingPage : voters) {
+        pName = votingPage.getVotername();
+        pRank = votingPage.getRank();
+
+        VotingPage contributor = new VotingPage(contributingPageName, contributingPageRank, votes);
+        ArrayList<VotingPage> vparr = new ArrayList<VotingPage>();
+        vparr.add(contributor);
+        receiver.output(KV.of(votingPage.getVotername(), new RankedPage(pName, pRank, vparr)));
+
+      }
+    }
+  }
+
+ 
 
   public static void main(String[] args) {
 
@@ -88,17 +150,35 @@ public class JobOnePageRankGangidi {
 
     PCollection<KV<String, RankedPage>> job2out = null;
 
-    // int iterations = 2;
-    // for (int i = 1; i <= iterations; i++) {
-    //   job2out = runJob2Iteration(job2in);
-    //   job2in = job2out;
+    int iterations = 2;
+    for (int i = 1; i <= iterations; i++) {
+      job2out = runJob2Iteration(job2in);
+      job2in = job2out;
 
-    // }
-    PCollection<String> outputjob2comp = job2out.apply(MapElements.into(
-        TypeDescriptors.strings())
-        .via(kv -> kv.toString()));
+    }
 
-    outputjob2comp.apply(TextIO.write().to("GangidiJobtwooutput"));
+    // PCollection<KV<Double, String>> job3output = job2out.apply(ParDo.of(new Job3Finalizer()));
+
+    // PCollection<KV<Double, String>> finalJob3MaxOutput = job3output.apply(Filter.by((KV<Double, String> element) -> {
+
+    //   if (element.getValue().equals(maxRankString)) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }));
+
+    // PCollection<String> finaloutput = finalJob3MaxOutput.apply(MapElements.into(
+    //     TypeDescriptors.strings())
+    //     .via(kv -> kv.toString()));
+
+    // finaloutput.apply(TextIO.write().to("GangidifinalMaxOutput"));
+
+    // PCollection<String> outputjob3comp = job3output.apply(MapElements.into(
+    // TypeDescriptors.strings())
+    // .via(kv -> kv.toString()));
+
+    // outputjob3comp.apply(TextIO.write().to("GangidiJobThreeoutput"));
 
     p.run().waitUntilFinish();
   }
