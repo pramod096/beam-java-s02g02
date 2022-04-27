@@ -1,7 +1,9 @@
 package nwmissouri.s2g2.vallapurapu;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
@@ -38,9 +40,59 @@ public class PageRankJobOneVallapurapu {
 	}
 
 	static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPage>> {
+
+		@ProcessElement
+		public void processElement(@Element KV<String, RankedPage> element,
+				OutputReceiver<KV<String, RankedPage>> receiver) {
+			Integer votes = 0;
+			ArrayList<VotingPage> voters = element.getValue().getPagesVoted();
+			if (voters instanceof Collection) {
+				votes = ((Collection<VotingPage>) voters).size();
+			}
+
+			for (VotingPage votingPage : voters) {
+				String pageName = votingPage.getName();
+				Double pageRank = votingPage.getRank();
+				String contributingPageName = element.getKey();
+				Double contributingPageRank = element.getValue().getRankValue();
+				VotingPage contributor = new VotingPage(contributingPageName, contributingPageRank, votes);
+				ArrayList<VotingPage> arr = new ArrayList<>();
+				arr.add(contributor);
+				receiver.output(KV.of(votingPage.getName(), new RankedPage(pageName, pageRank, arr)));
+			}
+		}
+
 	}
 
 	static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<String, RankedPage>> {
+
+		@ProcessElement
+		public void processElement(@Element KV<String, Iterable<RankedPage>> element,
+				OutputReceiver<KV<String, RankedPage>> receiver) {
+			String thisPage = element.getKey();
+			Iterable<RankedPage> rankedPages = element.getValue();
+			Double dampingFactor = 0.85;
+			Double updatedRank = (1 - dampingFactor);
+			ArrayList<VotingPage> newVoters = new ArrayList<VotingPage>();
+
+			for (RankedPage rankedPage : rankedPages) {
+				if (rankedPage != null) {
+					for (VotingPage votePage : rankedPage.getPagesVoted()) {
+						newVoters.add(votePage);
+						updatedRank += (dampingFactor) * votePage.getRank() / (double) votePage.getVotes();
+					}
+				}
+			}
+
+			receiver.output(KV.of(thisPage, new RankedPage(thisPage, updatedRank, newVoters)));
+		}
+	}
+
+	public static class Job3Final implements Comparator<KV<String, Double>>, Serializable {
+		@Override
+		public int compare(KV<String, Double> o1, KV<String, Double> o2) {
+			return o1.getValue().compareTo(o2.getValue());
+		}
 	}
 
 	public static void main(String[] args) {
