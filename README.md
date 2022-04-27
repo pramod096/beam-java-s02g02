@@ -73,9 +73,9 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Ramu Vallapurapu
-[Link to Repository](https://github.com/pramod096/beam-java-s02g02.git)
-[link to Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Ramu-Vallapurapu)
-[link to Individual Code Repo](https://github.com/pramod096/beam-java-s02g02/tree/main/RamuVallapurapu)
+[Link to Repository](https://github.com/pramod096/beam-java-s02g02.git)<br>
+[link to Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Ramu-Vallapurapu)<br>
+[link to Individual Code Repo](https://github.com/pramod096/beam-java-s02g02/tree/main/RamuVallapurapu)<br>
 
 #### Here is the Interconnection Diagram for social media pages.
 
