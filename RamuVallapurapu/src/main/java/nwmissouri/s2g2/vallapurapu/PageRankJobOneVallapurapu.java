@@ -88,6 +88,17 @@ public class PageRankJobOneVallapurapu {
 		}
 	}
 
+	static class Job3Finder extends DoFn<KV<String, RankedPage>, KV<String, Double>> {
+		@ProcessElement
+		public void processElement(@Element KV<String, RankedPage> element,
+				OutputReceiver<KV<String, Double>> receiver) {
+			String currentPage = element.getKey();
+			Double currentPageRank = element.getValue().getRankValue();
+
+			receiver.output(KV.of(currentPage, currentPageRank));
+		}
+	}
+
 	public static class Job3Final implements Comparator<KV<String, Double>>, Serializable {
 		@Override
 		public int compare(KV<String, Double> o1, KV<String, Double> o2) {
