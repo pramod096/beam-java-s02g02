@@ -68,8 +68,6 @@ public class JobOnePageRankGangidi {
     return updatedOutput;
   }
 
-  
-
   static class Job1Finalizer extends DoFn<KV<String, Iterable<String>>, KV<String, RankedPage>> {
     @ProcessElement
     public void processElement(@Element KV<String, Iterable<String>> element,
@@ -138,6 +136,20 @@ public class JobOnePageRankGangidi {
     }
   }
 
+  static class Job3Finalizer extends DoFn<KV<String, RankedPage>, KV<Double, String>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, RankedPage> element,
+        OutputReceiver<KV<Double, String>> receiver) {
+      RankedPage rp = element.getValue();
+      if (maxRankValue < rp.getRank()) {
+        maxRankString = element.getKey();
+        maxRankValue = rp.getRank();
+      }
+
+      receiver.output(KV.of(rp.getRank(), element.getKey()));
+    }
+  }
+
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
@@ -171,35 +183,35 @@ public class JobOnePageRankGangidi {
 
     PCollection<KV<String, RankedPage>> job2out = null;
 
-    int iterations = 2;
+    int iterations = 50;
     for (int i = 1; i <= iterations; i++) {
       job2out = runJob2Iteration(job2in);
       job2in = job2out;
 
     }
 
-    // PCollection<KV<Double, String>> job3output = job2out.apply(ParDo.of(new Job3Finalizer()));
+    PCollection<KV<Double, String>> job3output = job2out.apply(ParDo.of(new Job3Finalizer()));
 
-    // PCollection<KV<Double, String>> finalJob3MaxOutput = job3output.apply(Filter.by((KV<Double, String> element) -> {
+    PCollection<KV<Double, String>> finalJob3MaxOutput = job3output.apply(Filter.by((KV<Double, String> element) -> {
 
-    //   if (element.getValue().equals(maxRankString)) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }));
+      if (element.getValue().equals(maxRankString)) {
+        return true;
+      } else {
+        return false;
+      }
+    }));
 
-    // PCollection<String> finaloutput = finalJob3MaxOutput.apply(MapElements.into(
-    //     TypeDescriptors.strings())
-    //     .via(kv -> kv.toString()));
+    PCollection<String> finaloutput = finalJob3MaxOutput.apply(MapElements.into(
+        TypeDescriptors.strings())
+        .via(kv -> kv.toString()));
 
-    // finaloutput.apply(TextIO.write().to("GangidifinalMaxOutput"));
+    finaloutput.apply(TextIO.write().to("GangidifinalMaxOutput"));
 
-    // PCollection<String> outputjob3comp = job3output.apply(MapElements.into(
-    // TypeDescriptors.strings())
-    // .via(kv -> kv.toString()));
+    PCollection<String> outputjob3comp = job3output.apply(MapElements.into(
+        TypeDescriptors.strings())
+        .via(kv -> kv.toString()));
 
-    // outputjob3comp.apply(TextIO.write().to("GangidiJobThreeoutput"));
+    outputjob3comp.apply(TextIO.write().to("GangidiJobThreeoutput"));
 
     p.run().waitUntilFinish();
   }
