@@ -56,6 +56,34 @@ public class JobOneVemula {
     return updatedOutput;
   }
 
+
+static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, RankedPage> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      Integer votes = 0;
+      String pageName;
+      Double pageRank;
+
+      ArrayList<VotingPage> voters = element.getValue().getVoters();
+      if (voters instanceof Collection) {
+        votes = ((Collection<VotingPage>) voters).size();
+      }
+      String contributingPageName = element.getKey();
+
+      Double contributingPageRank = element.getValue().getRank();
+      for (VotingPage votingPage : voters) {
+        pageName = votingPage.getname();
+        pageRank = votingPage.getRank();
+        VotingPage contributor = new VotingPage(contributingPageName, contributingPageRank, votes);
+        ArrayList<VotingPage> votingpagearr = new ArrayList<VotingPage>();
+        votingpagearr.add(contributor);
+        receiver.output(KV.of(votingPage.getname(), new RankedPage(pageName, pageRank, votingpagearr)));
+
+      }
+    }
+  }
+
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
