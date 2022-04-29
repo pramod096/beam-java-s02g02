@@ -9,11 +9,14 @@ import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
+import org.apache.beam.sdk.transforms.Combine;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.Flatten;
 import org.apache.beam.sdk.transforms.GroupByKey;
 import org.apache.beam.sdk.transforms.MapElements;
+import org.apache.beam.sdk.transforms.Max;
+import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionList;
@@ -101,8 +104,8 @@ public class JobOnePageRankDrakshapally {
 
   public static class Job3Final implements Comparator<KV<String, Double>>, Serializable {
     @Override
-    public int compare(KV<String, Double> o1, KV<String, Double> o2) {
-      return o1.getValue().compareTo(o2.getValue());
+    public int compare(KV<String, Double> d1, KV<String, Double> d2) {
+      return d1.getValue().compareTo(d2.getValue());
     }
   }
 
@@ -111,24 +114,52 @@ public class JobOnePageRankDrakshapally {
     PipelineOptions options = PipelineOptionsFactory.create();
     Pipeline p = Pipeline.create(options);
     String dataFolder = "Sportsweb";
+    String dataFile = "Sports.md";
+    PCollection<KV<String, String>> p1 = DrakshapallyMapper(p, dataFolder, dataFile);
 
-    PCollection<KV<String, String>> pcol1 = DrakshapallyMapper(p, dataFolder, "Cricket.md");
+    dataFile = "Cricket.md";
+    PCollection<KV<String, String>> p2 = DrakshapallyMapper(p, dataFolder, dataFile);
 
-    PCollection<KV<String, String>> pcol2 = DrakshapallyMapper(p, dataFolder, "Football.md");
+    dataFile = "Football.md";
+    PCollection<KV<String, String>> p3 = DrakshapallyMapper(p, dataFolder, dataFile);
 
-    PCollection<KV<String, String>> pcol3 = DrakshapallyMapper(p, dataFolder, "Hockey.md");
+    dataFile = "Hockey.md";
+    PCollection<KV<String, String>> p4 = DrakshapallyMapper(p, dataFolder, dataFile);
 
-    PCollection<KV<String, String>> pcol4 = DrakshapallyMapper(p, dataFolder, "Basketball.md");
+    dataFile = "Basketball.md";
+    PCollection<KV<String, String>> p5 = DrakshapallyMapper(p, dataFolder, dataFile);
 
-    PCollection<KV<String, String>> pcol5 = DrakshapallyMapper(p, dataFolder, "Sports.md");
+    PCollectionList<KV<String, String>> pSportsList = PCollectionList.of(p1).and(p2).and(p3).and(p4)
+        .and(p5);
 
-    PCollectionList<KV<String, String>> pcolSportsList = PCollectionList.of(pcol1).and(pcol2).and(pcol3).and(pcol4)
-        .and(pcol5);
-
-    PCollection<KV<String, String>> mergedList = pcolSportsList.apply(Flatten.<KV<String, String>>pCollections());
+    PCollection<KV<String, String>> mergedList = pSportsList.apply(Flatten.<KV<String, String>>pCollections());
     PCollection<KV<String, Iterable<String>>> urlToDocs = mergedList.apply(GroupByKey.<String, String>create());
 
-    PCollection<String> pLinksStr = urlToDocs.apply(
+    PCollection<KV<String, RankedPage>> job2input = urlToDocs.apply(ParDo.of(new Job1Finalizer()));
+
+    PCollection<KV<String, RankedPage>> job2output = null;
+
+    PCollection<KV<String, RankedPage>> mappedKVs = null;
+
+    PCollection<KV<String, Iterable<RankedPage>>> reducedKVs = null;
+    int iterations = 50;
+    for (int i = 1; i <= iterations; i++) {
+      mappedKVs = job2input.apply(ParDo.of(new Job2Mapper()));
+
+      reducedKVs = mappedKVs
+          .apply(GroupByKey.<String, RankedPage>create());
+
+      job2output = reducedKVs.apply(ParDo.of(new Job2Updater()));
+
+      job2input = job2output;
+
+    }
+
+    PCollection<KV<String, Double>> maxRank = job2output.apply(ParDo.of(new Job3Finder()));
+
+    PCollection<KV<String, Double>> finalMax = maxRank.apply(Combine.globally(Max.of(new Job3Final())));
+
+    PCollection<String> pLinksStr = finalMax.apply(
         MapElements.into(
             TypeDescriptors.strings())
             .via((mergeOut) -> mergeOut.toString()));
@@ -155,3 +186,7 @@ public class JobOnePageRankDrakshapally {
 
   }
 }
+
+// Acknowledgment: I referred Pramod reddy Gonegari to complete the
+// JobOnePageRankDrakshapally.java and Seeked help from SaiKiran reddy Gangidi,
+// Ramu vallapurapu.
