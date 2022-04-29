@@ -3,9 +3,52 @@ package edu.nwmissouri.s2g2.pramod;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RankedPage implements Serializable {
+class RankedPage implements Serializable {
+    private String rankedPageName = "";
+    private Double rankValue = 1.0;
+    private ArrayList<VotingPage> pagesVoted;
 
-    public RankedPage(String key, ArrayList<VotingPage> voters) {
+    // Constructors
+    public RankedPage(String rankedPageName, ArrayList<VotingPage> pagesVoted) {
+        this.rankedPageName = rankedPageName;
+        this.pagesVoted = pagesVoted;
+
     }
 
+    public RankedPage(String rankedPageName, Double rankValue, ArrayList<VotingPage> pagesVoted) {
+        this.rankedPageName = rankedPageName;
+        this.rankValue = rankValue;
+        this.pagesVoted = pagesVoted;
+
+    }
+
+    // Getters and Setters
+    public String getRankedPageName() {
+        return rankedPageName;
+    }
+
+    public void setRankedPagename(String rankedPageName) {
+        this.rankedPageName = rankedPageName;
+    }
+
+    public Double getRankValue() {
+        return rankValue;
+    }
+
+    public void setRank(Double rankValue) {
+        this.rankValue = rankValue;
+    }
+
+    public ArrayList<VotingPage> getPagesVoted() {
+        return pagesVoted;
+    }
+
+    public void setVoters(ArrayList<VotingPage> pagesVoted) {
+        this.pagesVoted = pagesVoted;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %.4f %s", rankedPageName, rankValue, pagesVoted);
+    }
 }
