@@ -83,6 +83,25 @@ static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPa
       }
     }
   }
+static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<String, RankedPage>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, Iterable<RankedPage>> element,
+        OutputReceiver<KV<String, RankedPage>> receiver) {
+      Double dampingFactor = 0.85;
+      Double updatedRank = (1 - dampingFactor);
+      ArrayList<VotingPage> voternew = new ArrayList<VotingPage>();
+      for (RankedPage page : element.getValue()) {
+        if (page != null) {
+          for (VotingPage vp : page.getVoters()) {
+            voternew.add(vp);
+            updatedRank += (dampingFactor) * vp.getRank() / (double) vp.getvote();
+         }
+         }
+      }
+      receiver.output(KV.of(element.getKey(), new RankedPage(element.getKey(), updatedRank, voternew)));
+
+    }
+  }
 
   public static void main(String[] args) {
 
