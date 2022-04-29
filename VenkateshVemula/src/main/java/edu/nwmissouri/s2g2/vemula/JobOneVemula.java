@@ -102,6 +102,19 @@ static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<Strin
 
     }
   }
+  static class Job3Finalizer extends DoFn<KV<String, RankedPage>, KV<Double, String>> {
+    @ProcessElement
+    public void processElement(@Element KV<String, RankedPage> element,
+        OutputReceiver<KV<Double, String>> receiver) {
+      RankedPage rankpage = element.getValue();
+      if (mRValue < rankpage.getRank()) {
+        mRString = element.getKey();
+        mRValue = rankpage.getRank();
+      }
+    receiver.output(KV.of(rankpage.getRank(), element.getKey()));
+    }
+  }
+
 
   public static void main(String[] args) {
 
@@ -159,3 +172,6 @@ PCollection<KV<String, RankedPage>> job2in = utos.apply(ParDo.of(new Job1Finaliz
 
   }
 }
+
+// Acknowledgement : I refered the code form the saikiran, pramod and ramu to complete the Jobs.
+// Saikiran helped me a lot to implement the Custom page and the remaining. 
