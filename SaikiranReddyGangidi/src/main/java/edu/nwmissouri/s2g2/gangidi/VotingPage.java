@@ -5,7 +5,7 @@ import java.io.Serializable;
 class VotingPage implements Serializable {
 
     String votername = "unknown.md";
-    Integer contributorVotes = 0;
+    Integer contributorVotes ;
     Double rank = 1.00;
 
     public VotingPage(String voterName, Integer contributorVotes) {
