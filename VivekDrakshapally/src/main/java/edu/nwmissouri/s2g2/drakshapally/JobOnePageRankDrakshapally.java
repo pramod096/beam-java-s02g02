@@ -95,10 +95,10 @@ public class JobOnePageRankDrakshapally {
     @ProcessElement
     public void processElement(@Element KV<String, RankedPage> element,
         OutputReceiver<KV<String, Double>> receiver) {
-      String currentPage = element.getKey();
-      Double currentPageRank = element.getValue().getRankValue();
+      String PresentPage = element.getKey();
+      Double PresentPageRank = element.getValue().getRankValue();
 
-      receiver.output(KV.of(currentPage, currentPageRank));
+      receiver.output(KV.of(PresentPage, PresentPageRank));
     }
   }
 
@@ -112,22 +112,22 @@ public class JobOnePageRankDrakshapally {
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
-    Pipeline p = Pipeline.create(options);
+    Pipeline pipe = Pipeline.create(options);
     String dataFolder = "Sportsweb";
     String dataFile = "Sports.md";
-    PCollection<KV<String, String>> p1 = DrakshapallyMapper(p, dataFolder, dataFile);
+    PCollection<KV<String, String>> p1 = DrakshapallyMapper(pipe, dataFolder, dataFile);
 
     dataFile = "Cricket.md";
-    PCollection<KV<String, String>> p2 = DrakshapallyMapper(p, dataFolder, dataFile);
+    PCollection<KV<String, String>> p2 = DrakshapallyMapper(pipe, dataFolder, dataFile);
 
     dataFile = "Football.md";
-    PCollection<KV<String, String>> p3 = DrakshapallyMapper(p, dataFolder, dataFile);
+    PCollection<KV<String, String>> p3 = DrakshapallyMapper(pipe, dataFolder, dataFile);
 
     dataFile = "Hockey.md";
-    PCollection<KV<String, String>> p4 = DrakshapallyMapper(p, dataFolder, dataFile);
+    PCollection<KV<String, String>> p4 = DrakshapallyMapper(pipe, dataFolder, dataFile);
 
     dataFile = "Basketball.md";
-    PCollection<KV<String, String>> p5 = DrakshapallyMapper(p, dataFolder, dataFile);
+    PCollection<KV<String, String>> p5 = DrakshapallyMapper(pipe, dataFolder, dataFile);
 
     PCollectionList<KV<String, String>> pSportsList = PCollectionList.of(p1).and(p2).and(p3).and(p4)
         .and(p5);
@@ -166,12 +166,12 @@ public class JobOnePageRankDrakshapally {
 
     pLinksStr.apply(TextIO.write().to("drakshapallyjoboneoutput"));
 
-    p.run().waitUntilFinish();
+    pipe.run().waitUntilFinish();
   }
 
-  private static PCollection<KV<String, String>> DrakshapallyMapper(Pipeline p, String dataFolder, String dataFile) {
+  private static PCollection<KV<String, String>> DrakshapallyMapper(Pipeline pipe, String dataFolder, String dataFile) {
     String dataLocation = dataFolder + "/" + dataFile;
-    PCollection<String> pcolInputLines = p.apply(TextIO.read().from(dataLocation));
+    PCollection<String> pcolInputLines = pipe.apply(TextIO.read().from(dataLocation));
 
     PCollection<String> pcolLinkLines = pcolInputLines.apply(Filter.by((String line) -> line.startsWith("[")));
     PCollection<String> pcolLinkPages = pcolLinkLines.apply(MapElements.into(TypeDescriptors.strings())
@@ -188,5 +188,5 @@ public class JobOnePageRankDrakshapally {
 }
 
 // Acknowledgment: I referred Pramod reddy Gonegari to complete the
-// JobOnePageRankDrakshapally.java and Seeked help from SaiKiran reddy Gangidi,
+// JobOnePageRankDrakshapally.java and took help from SaiKiran reddy Gangidi,
 // Ramu vallapurapu.
