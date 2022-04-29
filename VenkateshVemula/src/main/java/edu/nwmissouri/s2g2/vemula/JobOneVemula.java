@@ -35,14 +35,27 @@ public class JobOneVemula {
         contributorVotes = ((Collection<String>) element.getValue()).size();
       }
       ArrayList<VotingPage> voters = new ArrayList<VotingPage>();
+      
+      
       for (String voterName : element.getValue()) {
         if (!voterName.isEmpty()) {
           voters.add(new VotingPage(voterName, contributorVotes));
         }
       }
+  
       receiver.output(KV.of(element.getKey(), new RankedPage(element.getKey(), voters)));
     }
   }
+
+  private static PCollection<KV<String, RankedPage>> runJob2Iteration(
+      PCollection<KV<String, RankedPage>> kvReducedPairs) {
+
+    PCollection<KV<String, RankedPage>> mappedKVs = kvReducedPairs.apply(ParDo.of(new Job2Mapper()));
+    PCollection<KV<String, Iterable<RankedPage>>> reducedKVs = mappedKVs.apply(GroupByKey.<String, RankedPage>create());
+    PCollection<KV<String, RankedPage>> updatedOutput = reducedKVs.apply(ParDo.of(new Job2Updater()));
+    return updatedOutput;
+  }
+
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
