@@ -207,12 +207,6 @@ public class JobOnePageRankGangidi {
 
     finaloutput.apply(TextIO.write().to("GangidifinalMaxOutput"));
 
-    PCollection<String> outputjob3comp = job3output.apply(MapElements.into(
-        TypeDescriptors.strings())
-        .via(kv -> kv.toString()));
-
-    outputjob3comp.apply(TextIO.write().to("GangidiJobThreeoutput"));
-
     p.run().waitUntilFinish();
   }
 
