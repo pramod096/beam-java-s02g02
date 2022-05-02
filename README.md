@@ -73,9 +73,9 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 
 
 ### Ramu Vallapurapu
-[Link to Repository](https://github.com/pramod096/beam-java-s02g02.git)
-[link to Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Ramu-Vallapurapu)
-[link to Individual Code Repo](https://github.com/pramod096/beam-java-s02g02/tree/main/RamuVallapurapu)
+[Link to Repository](https://github.com/pramod096/beam-java-s02g02.git)<br>
+[link to Wiki](https://github.com/pramod096/beam-java-s02g02/wiki/Ramu-Vallapurapu)<br>
+[link to Individual Code Repo](https://github.com/pramod096/beam-java-s02g02/tree/main/RamuVallapurapu)<br>
 
 #### Here is the Interconnection Diagram for social media pages.
 
@@ -84,8 +84,13 @@ mvn compile exec:java -D exec.mainClass=edu.nwmissouri.s2g2.gangidi.JobOnePageRa
 - In this project I am implementing Google PageRank on the social media pages.
 - It will show the most ranked social media page based on the usage on the internet
 - Google PageRank using Apache Beam with Java SDK
-- We can run the application using ``` mvn compile exec:java -D exec.mainClass=nwmissouri.s2g2.vallapurapu.JobOnePageRankVallapurapu ```
+- We can run the application using 
+``` 
+mvn compile exec:java -D exec.mainClass=nwmissouri.s2g2.vallapurapu.PageRankJobOneVallapurapu 
+```
+#### Here is the Result after successful execution 
 
+<img src="images/vallapurapuFinalResult.png" alt="CricketWeb" style="width:300px;height:200px;text-align:center;display:block"/>
 
 
 

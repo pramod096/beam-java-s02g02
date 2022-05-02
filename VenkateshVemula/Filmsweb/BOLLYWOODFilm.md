@@ -4,3 +4,4 @@ Hindi cinema, often popularly known as Bollywood and formerly as Bombay cinema, 
 
 In 2017, Indian cinema produced 1,986 feature films, with the Hindi film industry as its largest filmmaker, producing 364 Hindi films the same year. As per data from 2014, Hindi cinema represented 43 percent of Indian net box-office revenue Tamil and Telugu cinema represented 36 percent, and the remaining regional cinema constituted 21 percent. Hindi cinema has overtaken the U.S. film industry to become the largest centre for film production in the world. In 2001 ticket sales, Indian cinema (including Hindi films) reportedly sold an estimated 3.6 billion tickets worldwide, compared to Hollywood's 2.6 billion tickets sold. Earlier Hindi films tended to use vernacular Hindustani, mutually intelligible by people who self-identify as speaking either Hindi or Urdu, and modern Hindi movies increasingly incorporate elements of Hinglish.
 
+[MOLLYWOODFilm](MOLLYWOODFilm.md)
