@@ -26,15 +26,6 @@ import org.apache.beam.sdk.values.TypeDescriptors;
 
 public class PageRankJobOnePramod {
 
-  // DEFINE DOFNS
-  // ==================================================================
-  // You can make your pipeline assembly code less verbose by defining
-  // your DoFns statically out-of-line.
-  // Each DoFn<InputT, OutputT> takes previous output
-  // as input of type InputT
-  // and transforms it to OutputT.
-  // We pass this DoFn to a ParDo in our pipeline.
-
   /**
    * DoFn Job1Finalizer takes KV(String, String List of outlinks) and transforms
    * the value into our custom RankedPage Value holding the page's rank and list
@@ -61,6 +52,10 @@ public class PageRankJobOnePramod {
     }
   }
 
+  /*
+   * Gives the RankedPage Object for all the pages having incoming links from
+   * other pages.
+   */
   static class Job2Mapper extends DoFn<KV<String, RankedPage>, KV<String, RankedPage>> {
     @ProcessElement
     public void processElement(@Element KV<String, RankedPage> element,
@@ -84,6 +79,9 @@ public class PageRankJobOnePramod {
     }
   }
 
+  /*
+   * Calculates the pages rank value of each page based.
+   */
   static class Job2Updater extends DoFn<KV<String, Iterable<RankedPage>>, KV<String, RankedPage>> {
     @ProcessElement
     public void processElement(@Element KV<String, Iterable<RankedPage>> element,
@@ -107,6 +105,9 @@ public class PageRankJobOnePramod {
     }
   }
 
+  /**
+   * Gets KV pairs which contain the final page rank value of each page.
+   */
   static class Job3Finder extends DoFn<KV<String, RankedPage>, KV<String, Double>> {
     @ProcessElement
     public void processElement(@Element KV<String, RankedPage> element,
@@ -118,6 +119,10 @@ public class PageRankJobOnePramod {
     }
   }
 
+  /**
+   * Class which implements the Comparator interface to get the page with highest
+   * page rank value.
+   */
   public static class Job3Final implements Comparator<KV<String, Double>>, Serializable {
     @Override
     public int compare(KV<String, Double> o1, KV<String, Double> o2) {
@@ -125,6 +130,13 @@ public class PageRankJobOnePramod {
     }
   }
 
+  /**
+   * Method to read each line from a web page and find the outgoing links.
+   * 
+   * @param p         Pipeline.
+   * @param myMiniWeb Location containing all the web pages.
+   * @param dataFile  The exact web page to read.
+   */
   private static PCollection<KV<String, String>> pramodMapOne(Pipeline p, String myMiniWeb, String dataFile) {
     String dataLocation = myMiniWeb + "/" + dataFile;
     PCollection<String> pcolInputLines = p.apply(TextIO.read().from(dataLocation));
@@ -142,11 +154,20 @@ public class PageRankJobOnePramod {
 
   }
 
+  /**
+   * Main Method
+   * 
+   * @param args
+   */
   public static void main(String[] args) {
 
     PipelineOptions options = PipelineOptionsFactory.create();
     Pipeline p = Pipeline.create(options);
+
+    // Name of my mini Internet
     String myMiniWeb = "webBooks";
+
+    // Varibale to store all the web pages and pass as input to pramodMapOne Method.
     String dataFile = "science.md";
     PCollection<KV<String, String>> pcol1 = pramodMapOne(p, myMiniWeb, dataFile);
 
@@ -175,6 +196,7 @@ public class PageRankJobOnePramod {
     PCollection<KV<String, Iterable<String>>> kvStringReducedPairs = mergedList
         .apply(GroupByKey.<String, String>create());
 
+    // PCollection to Store Job1 Output
     PCollection<KV<String, RankedPage>> job2in = kvStringReducedPairs.apply(ParDo.of(new Job1Finalizer()));
 
     PCollection<KV<String, RankedPage>> job2out = null;
@@ -182,7 +204,10 @@ public class PageRankJobOnePramod {
     PCollection<KV<String, RankedPage>> mappedKVs = null;
 
     PCollection<KV<String, Iterable<RankedPage>>> reducedKVs = null;
+
     int iterations = 50;
+
+    // Looping a fixed number of times to update the pagerank of each web page.
     for (int i = 1; i <= iterations; i++) {
       mappedKVs = job2in.apply(ParDo.of(new Job2Mapper()));
 
@@ -195,16 +220,14 @@ public class PageRankJobOnePramod {
 
     }
 
-    // PCollection<String> job2FinalOutput = job2out.apply(MapElements.into(
-    // TypeDescriptors.strings())
-    // .via(kv -> kv.toString()));
-
-    // job2FinalOutput.apply(TextIO.write().to("pramodJobTwoOutput"));
-
+    // PCollection to find and store all the web pages final page rank value using
+    // Job3Finder, as KV Pairs.
     PCollection<KV<String, Double>> maxRank = job2out.apply(ParDo.of(new Job3Finder()));
 
+    // Finding the Page with Highest PageRank Value using Job3Final.
     PCollection<KV<String, Double>> finalMax = maxRank.apply(Combine.globally(Max.of(new Job3Final())));
 
+    // Printing the final output to a text file.
     PCollection<String> fnl = finalMax.apply(MapElements.into(
         TypeDescriptors.strings())
         .via(kv -> kv.toString()));
